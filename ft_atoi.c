@@ -1,16 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.c                                         :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anaji-el <anaji-el@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/27 02:00:04 by anaji-el          #+#    #+#             */
-/*   Updated: 2022/02/27 02:01:11 by anaji-el         ###   ########.fr       */
+/*   Created: 2022/03/08 01:42:18 by anaji-el          #+#    #+#             */
+/*   Updated: 2022/03/08 16:25:09 by anaji-el         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include <unistd.h>
-#include <signal.h>
-#include <stdlib.h>
+
+int	ft_atoi(const char *str)
+{
+	int	i;
+	int	r;
+
+	i = 0;
+	r = 0;
+
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		r = r * 10 + (str[i] - '0');
+		i++;
+	}
+	return (r);
+}

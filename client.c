@@ -6,39 +6,50 @@
 /*   By: anaji-el <anaji-el@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 06:15:59 by anaji-el          #+#    #+#             */
-/*   Updated: 2022/03/02 16:32:56 by anaji-el         ###   ########.fr       */
+/*   Updated: 2022/03/09 16:36:52 by anaji-el         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minitalk.h>
+#include <signal.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
 
-void	send_char(int pid, char c)
+void send_msg(int pid, char *str)
 {
-	int	i;
-	int bit;
+	int i;
+	int j;
 	
-	i = 8
-	while(i++)
-	{
-		bit = (c << i & 128)
-		if( bit == 0)
-			kill(pid,SIGUSR2);
-		if(bit == 1)
-			kill(pid,SIGUSR1);
-	
-	}
-}
-void	send_string(int pid, char *str)
-{
-	int	i;
-	int	s;
-
-	i = 0;
-	s = 0;
+	i=0;
 	
 	while (str[i])
 	{
-		send_char(pid, str[i]);
+		j = 0;
+		while (j < 8)
+		{
+			if ((str[i] & 128 >> j) != 0)
+				kill(pid, SIGUSR1);
+			else
+				kill(pid, SIGUSR2);
+			j++;
+			usleep(800);
+		}
 		i++;
 	}
+}
+int main(int ac, char **av)
+{
+	int pid;
+	if(ac != 3)
+	{
+		write(1,"INVALID ARGUMENT !", 19);
+		exit(EXIT_FAILURE);
+	}
+
+	pid = atoi(av[1]);	
+	if (pid <= 0)
+	{
+		write(1,"client:" "INVALID PID!",20);
+	}
+	send_msg(pid, av[2]);
 }
