@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anaji-el <anaji-el@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/14 19:43:12 by anaji-el          #+#    #+#             */
-/*   Updated: 2022/03/15 16:17:38 by anaji-el         ###   ########.fr       */
+/*   Created: 2022/03/15 15:04:59 by anaji-el          #+#    #+#             */
+/*   Updated: 2022/03/15 16:45:44 by anaji-el         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,18 +39,24 @@ void	send(char c, int pid)
 	while (i >= 0)
 	{	
 		bit = (c >> i) & 1;
-		kill (pid, SIGUSR1 + bit);
+		kill(pid, SIGUSR1 + bit);
 		usleep (500);
 		i--;
 	}
 }
 
+void	success(int sig)
+{
+	(void)sig;
+	write(1, "MSG SENT SUCCESSFULLY\n", 22);
+}
+
 int	main(int ac, char **av)
 {
+	char	*s;
 	int		pid;
-	int		i;
 
-	i = 0;
+	signal(SIGUSR1, success);
 	if (ac != 3)
 	{
 		write(1, "error\n", 6);
@@ -62,9 +68,11 @@ int	main(int ac, char **av)
 		write(1, "invalid pid\n", 12);
 		exit(EXIT_FAILURE);
 	}
-	while (av[2][i] != '\0')
+	s = av[2];
+	while (*s != '\0')
 	{
-		send(av[2][i], pid);
-		i++;
+		send(*s, pid);
+		s++;
 	}
+	send(0, pid);
 }

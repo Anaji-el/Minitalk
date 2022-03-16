@@ -5,76 +5,39 @@
 #                                                     +:+ +:+         +:+      #
 #    By: anaji-el <anaji-el@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/02/27 02:02:38 by anaji-el          #+#    #+#              #
-#    Updated: 2022/03/06 21:27:24 by anaji-el         ###   ########.fr        #
+#    Created: 2022/03/14 18:57:15 by anaji-el          #+#    #+#              #
+#    Updated: 2022/03/15 18:57:56 by anaji-el         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# NAME = Minitalk.a
-# CC = gcc
-# CFLAGS = -Wall -Wextra -Werror
-# RM = rm -f
-# SRC_C = client.c
-# SRC_S = server.c
+CLIENT = client
+SERVER = server
+CLIENT_BONUS = client_bonus
+SERVER_BONUS = server_bonus
 
-# OBJ_C = $(SRC_C:.c=.o)
-# OBJ_S = $(SRC_S:.c=.o)
-
-# %.o: %.c Minitalk.h
-# 	$(CC) $(CFLAGS) -c $<
-		
-# $(NAME): $(OBJ)
-# 	ar rc $(NAME) $(OBJ)
-	
-# all : $(NAME)
-
-# clean :
-# 	$(RM) $(OBJ)
-
-# fclean : clean
-# 	$(RM) $(NAME)
-
-# re: fclean $(NAME)
-
-# .PHONY: all clean fclean re
-
-NAME = minitalk
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
-RM = rm -rf
+FLAGS = -Wall -Wextra -Werror
 
-SERVER = server.c
-CLIENT = client.c
+all:
 
+	@$(CC) $(FLAGS) client.c  -o $(CLIENT)
 
-SERVER_BONUS = server_bonus.c
-CLIENT_BONUS = client_bonus.c
+	@$(CC) $(FLAGS) server.c  -o $(SERVER)
+	
+	@$(CC) $(FLAGS) client_bonus.c  -o $(CLIENT_BONUS)
 
-OBJ_S = $(SERVER:.c=.o)
-OBJ_C = $(CLIENT:.c=.o)
+	@$(CC) $(FLAGS) server_bonus.c  -o $(SERVER_BONUS)
 
-OBJ = $(SRC:.c=.o)
+	
+%.o:%.c 
+	@$(CC) $(FLAGS)
 
-OBJ_S_BONUS = $(SERVER_BONUS:.c=.o)
-OBJ_C_BONUS = $(CLIENT_BONUS:.c=.o)
+clean:
+	@rm -f $(CLIENT) $(SERVER)
+	@rm -f $(CLIENT_BONUS) $(SERVER_BONUS)
 
-%.o: %.c minitalk.h
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(NAME): $(OBJ) $(OBJ_S) $(OBJ_C)
-	$(CC) $(CFLAGS) $(OBJ) $(OBJ_S)  -o server
-	$(CC) $(CFLAGS) $(OBJ) $(OBJ_C)  -o client
-
-all : $(NAME)
-
-bonus : $(OBJ) $(OBJ_S_BONUS) $(OBJ_C_BONUS)
-	$(CC) $(CFLAGS) $(OBJ) $(OBJ_S_BONUS)  -o server_bonus
-	$(CC) $(CFLAGS) $(OBJ) $(OBJ_C_BONUS)  -o client_bonus
-
-clean :
-	$(RM) $(OBJ) $(OBJ_S) $(OBJ_C) $(OBJ_S_BONUS) $(OBJ_C_BONUS) server client server_bonus client_bonus
-
-fclean : clean
-	$(RM) $(NAME)
-
-re: fclean $(NAME)
+fclean: clean
+	@rm -f $(CLIENT) $(SERVER)
+	@rm -f $(CLIENT_BONUS) $(SERVER_BONUS)
+	
+re: fclean all
